@@ -2,13 +2,14 @@
 cd %~dp0
 chcp 65001 >> nul
 color F
-set ver=1.0.0
+set ver=1.2.0
 set name=Droid_Package_Manager
 set shortname=DPM
 title %shortname% - %ver%
-echo cd %%~dp0\..\ >Links\dpm.cmd
-echo dpm.cmd %%* >>Links\dpm.cmd
-
+echo cd %%~dp0\..\ >Links\droid.cmd
+echo dpm.cmd %%* >>Links\droid.cmd
+md Links >> nul
+md Packages >> nul
 echo.
 call data\xecho Green "%name%-%ver%"
 echo.
@@ -26,6 +27,7 @@ if "%todo%"=="install" goto install
 if "%todo%"=="uninstall" goto uninstall
 if "%todo%"=="update" goto update
 if "%todo%"=="list" goto list
+if "%todo%"=="upgrade" goto upgrade
 call data\xecho Yellow "Help_menu..."
 echo Syntax:
 echo dpm (action) (optional:package_name) (optional:author_name)
@@ -35,20 +37,23 @@ echo install (installing\reinstalling new repo)
 echo uninstall (uninstalling repo)
 echo update (rewriting exist repo)
 echo list (opens repo links folder)
+echo upgrade (updates self)
 echo.
 echo Examples:
 echo.
-echo dpm install D-ino CodeDroidX
+echo droid upgrade
 echo.
-echo dpm list
+echo droid install D-ino CodeDroidX
 echo.
-echo dpm uninstall D-ino
+echo droid list
 echo.
-echo dpm install Impulse LimerBoy
+echo droid uninstall D-ino
+echo.
+echo droid install Impulse LimerBoy
 echo.
 echo Impulse
 echo.
-echo dpm update Impulse LimerBoy
+echo droid update Impulse LimerBoy
 echo.
 pause
 :finish
@@ -92,4 +97,11 @@ goto finish
 :list
 call data\xecho Gray "Open-List..."
 start Links
+goto finish
+
+:upgrade
+call data\xecho DarkYellow "Upgrade-%name%..."
+data\gh.exe repo clone CodeDroidX/DroidPackageManager Packages\TempUpgradeSelf
+xcopy Packages\TempUpgradeSelf %~dp0 /H /Y /C /R /S /I
+rmdir /q /s Packages\TempUpgradeSelf
 goto finish
