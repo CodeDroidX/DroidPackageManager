@@ -29,8 +29,12 @@ if "%todo%"=="update" goto update
 if "%todo%"=="list" goto list
 if "%todo%"=="upgrade" goto upgrade
 call data\xecho Yellow "Help_menu..."
+echo.
+echo Note:
+echo You should add "Links" folder to PATH for running droid and installed repos from cmd!
+echo.
 echo Syntax:
-echo dpm (action) (optional:package_name) (optional:author_name)
+echo droid (action) (optional:package_name) (optional:author_name)
 echo.
 echo Actions:
 echo install (installing\reinstalling new repo)
