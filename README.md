@@ -1,11 +1,12 @@
 # DroidPackageManager
 My package manager based on Github CLI
+<span style="color:orange;">My package manager based on Github CLI</span>
 
-🟡--systematizes repo's\
---downloading\deleting repo's\
---updating repo's\
---it works with requirements.txt for pip)\
---create links to repo's main exec file to run it from cmd anywhere
+![#f03c15](https://via.placeholder.com/15/ffff00/000000?text=+) `--systematizes repo's`\
+![#f03c15](https://via.placeholder.com/15/0000ff/000000?text=+) `--downloading\deleting repo's`\
+![#f03c15](https://via.placeholder.com/15/ffa500/000000?text=+) `--updating repo's`\
+![#f03c15](https://via.placeholder.com/15/00ff00/000000?text=+) `--it works with requirements.txt for pip)`\
+![#f03c15](https://via.placeholder.com/15/ff00ff/000000?text=+) `--create links to repo's main exec file to run it from cmd anywhere`
 
 
 --note--Add Links\ to PATH, or run cmd in this dir to start
