@@ -5,7 +5,7 @@ color F
 setlocal enableextensions enabledelayedexpansion
 for /f %%a in ('copy /Z "%~dpf0" nul') do set "ASCII_13=%%a"
 
-set ver=2.0.0
+set ver=2.5.0
 set name=Droid_Package_Manager
 set shortname=DPM
 call data\xecho DarkYellow "%name%-%ver%"
@@ -13,15 +13,15 @@ echo.
 del data\check.tmp
 ping githubstatus.com -n 1 -l 1 -w 200| find "TTL" > data\check.tmp
 set /p chping=<data\check.tmp
-del data\check.tmp
 if not "%chping%"=="" set internet=Yes
 if "%chping%"=="" set internet=No & call data\xecho Red "No_internet_connection!_you_cant_install_and_update..." & echo.
 
-call data\xecho Green "Starting_DPM..."
+call data\xecho Green "Prepairing_DPM..."
 set /p "=[            ]" <NUL
 chcp 65001 >> nul
 set /p "=.!ASCII_13![######      ]" <NUL
 
+data\7z e data\gh.rar -o"data" >>nul
 echo cd %%~dp0\..\ >Links\droid.cmd
 echo dpm.cmd %%* >>Links\droid.cmd
 if not exist Links md Links >> nul
@@ -57,7 +57,7 @@ if not "%errorlevel%"=="0" echo -!WARNING!- You should add Links\ folder to PATH
 set /p "=.!ASCII_13![############]" <NUL
 echo.
 echo.
-call data\xecho Magenta "Select_action..."
+call data\xecho Magenta "Thinking..."
 echo.
 
 if "%todo%"=="install" goto install
@@ -127,7 +127,8 @@ goto finish
 
 :finish
 echo.
-call data\xecho Green "DPM_work_completed!"
+call data\xecho Cyan "Freezing_data_and_exit!"
+del /f data\gh.exe
 echo.
 exit /b
 
