@@ -1,40 +1,61 @@
 @Echo off
 cd %~dp0
 if "%~1"=="exit" exit /b
-chcp 65001 >> nul
 color F
-set ver=1.6.0
+setlocal enableextensions enabledelayedexpansion
+for /f %%a in ('copy /Z "%~dpf0" nul') do set "ASCII_13=%%a"
+
+set ver=2.0.0
 set name=Droid_Package_Manager
 set shortname=DPM
+call data\xecho Green "%name%-%ver%"
+echo.
+del data\check.tmp
+ping githubstatus.com -n 1 -l 1 -w 200| find "TTL" > data\check.tmp
+set /p chping=<data\check.tmp
+if not "%chping%"=="" set internet=Yes
+if "%chping%"=="" set internet=No & call data\xecho Red "No_internet_connection!_you_cant_install_and_update..." & echo.
+
+call data\xecho Green "Starting_DPM..."
+set /p "=[            ]" <NUL
+chcp 65001 >> nul
+set /p "=.!ASCII_13![######      ]" <NUL
+
 echo cd %%~dp0\..\ >Links\droid.cmd
 echo dpm.cmd %%* >>Links\droid.cmd
 if not exist Links md Links >> nul
 if not exist Packages md Packages >> nul
 
+set /p "=.!ASCII_13![############]" <NUL
 echo.
-call data\xecho Green "%name%-%ver%"
 echo.
-chcp 65001 >> nul
-
 call data\xecho DarkCyan "Parsing_args..."
-echo.
+
+set /p "=[            ]" <NUL
 set todo=%~1
+set /p "=.!ASCII_13![######      ]" <NUL
+
 set package_name=%~2
 set sub_arg=%~3
-
-call data\xecho Yellow "Status_check..."
+set /p "=.!ASCII_13![############]" <NUL
 echo.
+echo.
+call data\xecho Yellow "Status_check..."
+set /p "=[            ]" <NUL
 
 echo exit() | python >>nul
-echo.
 if not "%errorlevel%"=="0" echo -!WARNING!- Many projects need python. It isnot at you pc, but if you have python and see this tip: please add python to path (in python setup) & pause
-pip >>nul
-echo.
-if not "%errorlevel%"=="0" echo -!WARNING!- You should have PIP at your pc if you wont to install python projects, (tick it in python setup or download it yourself) & pause
-call droid exit>>nul
-echo.
-if not "%errorlevel%"=="0" echo -!WARNING!- You should add Links\ folder to PATH, for use installed apps and DPM from cmd!!!!! & pause
+set /p "=.!ASCII_13![####        ]" <NUL
 
+pip >>nul
+if not "%errorlevel%"=="0" echo -!WARNING!- You should have PIP at your pc if you wont to install python projects, (tick it in python setup or download it yourself) & pause
+set /p "=.!ASCII_13![########    ]" <NUL
+
+call droid exit>>nul
+if not "%errorlevel%"=="0" echo -!WARNING!- You should add Links\ folder to PATH, for use installed apps and DPM from cmd!!!!! & pause
+set /p "=.!ASCII_13![############]" <NUL
+echo.
+echo.
 call data\xecho Magenta "Select_action..."
 echo.
 
@@ -89,6 +110,11 @@ goto help
 :uninerr
 call data\xecho Red "No_Package!"
 echo You cant unins %package_name%, it caused or not exist!
+goto finish
+
+:interneterr
+call data\xecho Red "No_Connection!"
+echo You need internet for it!
 goto finish
 
 :repoerror
@@ -176,6 +202,7 @@ start Links
 goto finish
 
 :upgrade
+if not "%internet%"=="Yes" goto interneterr
 call data\xecho DarkYellow "Upgrade-%name%..."
 data\gh.exe repo clone CodeDroidX/DroidPackageManager Packages\TempUpgradeSelf
 if %errorlevel% NEQ 0 goto repoerror
