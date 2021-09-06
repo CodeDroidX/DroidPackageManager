@@ -5,11 +5,11 @@ color F
 set ver=1.5.0
 set name=Droid_Package_Manager
 set shortname=DPM
-title %shortname% - %ver%
 echo cd %%~dp0\..\ >Links\droid.cmd
 echo dpm.cmd %%* >>Links\droid.cmd
-md Links >> nul
-md Packages >> nul
+if not exist Links md Links >> nul
+if not exist Packages md Packages >> nul
+
 echo.
 call data\xecho Green "%name%-%ver%"
 echo.
@@ -28,6 +28,8 @@ if "%todo%"=="uninstall" goto uninstall
 if "%todo%"=="update" goto update
 if "%todo%"=="list" goto list
 if "%todo%"=="upgrade" goto upgrade
+if "%todo%"=="tips" goto tips
+if "%todo%"=="pass" goto finish
 :help
 call data\xecho Yellow "Help_menu..."
 echo.
@@ -43,6 +45,7 @@ echo uninstall (uninstalling repo)
 echo update (rewriting exist repo)
 echo list (opens repo links folder)
 echo upgrade (updates self)
+echo tips (shows what you should to do)
 echo.
 echo Examples:
 echo.
@@ -162,4 +165,17 @@ data\gh.exe repo clone CodeDroidX/DroidPackageManager Packages\TempUpgradeSelf
 if %errorlevel% NEQ 0 goto repoerror
 xcopy Packages\TempUpgradeSelf %~dp0 /H /Y /C /R /S /I
 rmdir /q /s Packages\TempUpgradeSelf
+goto finish
+
+:tips
+call data\xecho DarkCyan "Welcome_to_the_TIPS!"
+echo -------Tips List-------------------------
+echo exit() | python >>nul
+if not "%errorlevel%"=="0" echo -!!!- Many projects need python. It isnot at you pc, but if you have python and see this tip: please add python to path (in python setup) 
+pip >>nul
+if not "%errorlevel%"=="0" echo -!!!- You should have PIP at your pc if you wont to install python projects, (tick it in python setup or download it yourself) 
+call droid pass>>nul
+if not "%errorlevel%"=="0" echo -!!!- You should add Links\ folder to PATH, for use installed apps and DPM from cmd!!!!!
+echo -----------------------------------------
+pause
 goto finish
