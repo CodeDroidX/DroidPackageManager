@@ -8,7 +8,7 @@ for /f %%a in ('copy /Z "%~dpf0" nul') do set "ASCII_13=%%a"
 set ver=2.0.0
 set name=Droid_Package_Manager
 set shortname=DPM
-call data\xecho Green "%name%-%ver%"
+call data\xecho DarkYellow "%name%-%ver%"
 echo.
 del data\check.tmp
 ping githubstatus.com -n 1 -l 1 -w 200| find "TTL" > data\check.tmp
