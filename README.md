@@ -1,4 +1,4 @@
-# DroidPackageManager\
+# DroidPackageManager
 Add Links\ to PATH, or run cmd in this dir\
 
 
