@@ -13,6 +13,7 @@ echo.
 del data\check.tmp
 ping githubstatus.com -n 1 -l 1 -w 200| find "TTL" > data\check.tmp
 set /p chping=<data\check.tmp
+del data\check.tmp
 if not "%chping%"=="" set internet=Yes
 if "%chping%"=="" set internet=No & call data\xecho Red "No_internet_connection!_you_cant_install_and_update..." & echo.
 
