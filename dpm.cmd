@@ -2,7 +2,7 @@
 cd %~dp0
 chcp 65001 >> nul
 color F
-set ver=1.3.0
+set ver=1.5.0
 set name=Droid_Package_Manager
 set shortname=DPM
 title %shortname% - %ver%
@@ -98,12 +98,22 @@ if exist Packages\%package_name% call data\xecho Red "Uninstalling-%package_name
 call data\xecho Blue "Installing-%package_name%..."
 xcopy Packages\%package_name%temp Packages\%package_name% /H /Y /C /R /S /I
 rmdir /q /s Packages\%package_name%temp
+
+
+if not exist Packages\%package_name%\requirements.txt goto noinstrequirements
+pip
+if "%errorlevel%"=="0" pip install -r Packages\%package_name%\requirements.txt
+:noinstrequirements
+
+
 echo.
 cd Packages\%package_name%
 dir /b
 cd %~dp0
 echo.
+:reinput
 set /p ex=Please, choose file for exec(1.py, 1.exe, 1.bat, 1.jar etc):
+if not exist Packages\%package_name%\%ex% echo Input correct exec file! & goto reinput
 echo @Echo off > Links\%package_name%.cmd
 echo "%%~dp0..\Packages\%package_name%\%ex%" %%*>> Links\%package_name%.cmd
 goto finish
@@ -113,6 +123,17 @@ if "%package_name%"=="" goto inval
 if not exist Packages\%package_name% goto uninerr
 
 call data\xecho Red "Uninstalling-%package_name%..."
+
+if not exist Packages\%package_name%\requirements.txt goto nounrequirements
+echo.
+call data\xecho Red "Found_pip_connected_modules"
+call data\xecho DarkRed "Delete_them?"
+set /p delmod=y\n:
+if "%delmod%"=="n" goto nounrequirements
+pip
+if "%errorlevel%"=="0" pip uninstall -y -r Packages\%package_name%\requirements.txt
+:nounrequirements
+
 rmdir /q /s Packages\%package_name%
 del /f Links\%package_name%.cmd
 goto finish
