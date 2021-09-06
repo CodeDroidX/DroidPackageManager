@@ -1,8 +1,9 @@
 @Echo off
 cd %~dp0
+if "%~1"=="exit" exit /b
 chcp 65001 >> nul
 color F
-set ver=1.5.0
+set ver=1.6.0
 set name=Droid_Package_Manager
 set shortname=DPM
 echo cd %%~dp0\..\ >Links\droid.cmd
@@ -21,14 +22,28 @@ set todo=%~1
 set package_name=%~2
 set sub_arg=%~3
 
+call data\xecho Yellow "Status_check..."
+echo.
+
+echo exit() | python >>nul
+echo.
+if not "%errorlevel%"=="0" echo -!WARNING!- Many projects need python. It isnot at you pc, but if you have python and see this tip: please add python to path (in python setup) & pause
+pip >>nul
+echo.
+if not "%errorlevel%"=="0" echo -!WARNING!- You should have PIP at your pc if you wont to install python projects, (tick it in python setup or download it yourself) & pause
+call droid exit>>nul
+echo.
+if not "%errorlevel%"=="0" echo -!WARNING!- You should add Links\ folder to PATH, for use installed apps and DPM from cmd!!!!! & pause
+
 call data\xecho Magenta "Select_action..."
 echo.
+
 if "%todo%"=="install" goto install
 if "%todo%"=="uninstall" goto uninstall
 if "%todo%"=="update" goto update
 if "%todo%"=="list" goto list
 if "%todo%"=="upgrade" goto upgrade
-if "%todo%"=="tips" goto tips
+if "%todo%"=="tips" goto finish
 if "%todo%"=="pass" goto finish
 :help
 call data\xecho Yellow "Help_menu..."
@@ -45,7 +60,8 @@ echo uninstall (uninstalling repo)
 echo update (rewriting exist repo)
 echo list (opens repo links folder)
 echo upgrade (updates self)
-echo tips (shows what you should to do)
+echo pass (starts currectly and just exit)
+echo exit (start and exit)
 echo.
 echo Examples:
 echo.
