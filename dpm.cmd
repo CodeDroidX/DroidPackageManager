@@ -5,8 +5,9 @@ color F
 setlocal enableextensions enabledelayedexpansion
 for /f %%a in ('copy /Z "%~dpf0" nul') do set "ASCII_13=%%a"
 
-set ver=2.5.0
+set ver=2.6.0
 set name=Droid_Package_Manager
+set errorcode=0
 set shortname=DPM
 call data\xecho DarkYellow "%name%-%ver%"
 echo.
@@ -24,6 +25,7 @@ set /p "=.!ASCII_13![######      ]" <NUL
 data\7z e data\gh.rar -o"data" >>nul
 echo cd %%~dp0\..\ >Links\droid.cmd
 echo dpm.cmd %%* >>Links\droid.cmd
+
 if not exist Links md Links >> nul
 if not exist Packages md Packages >> nul
 
@@ -67,6 +69,7 @@ if "%todo%"=="list" goto list
 if "%todo%"=="upgrade" goto upgrade
 if "%todo%"=="tips" goto finish
 if "%todo%"=="pass" goto finish
+if "%todo%"=="login" goto login
 :help
 call data\xecho Yellow "Help_menu..."
 echo.
@@ -106,21 +109,29 @@ goto finish
 
 :inval
 call data\xecho Red "Invalid_Syntax!"
+set errorcode=Invalid_Syntax!
 goto help
 
 :uninerr
 call data\xecho Red "No_Package!"
 echo You cant unins %package_name%, it caused or not exist!
+set errorcode=Invalid_Package!
 goto finish
 
 :interneterr
 call data\xecho Red "No_Connection!"
 echo You need internet for it!
+set errorcode=No_Connection!
 goto finish
 
 :repoerror
 call data\xecho Red "Downloding_error!"
+echo.
+echo.
 echo Repo called %sub_arg%/%package_name% renamed or not exist!
+echo.
+echo Or you do not login (droid login)!
+set errorcode=Downloding_error!
 echo.
 pause
 goto finish
@@ -130,6 +141,7 @@ echo.
 call data\xecho Cyan "Freezing_data_and_exit!"
 del /f data\gh.exe
 echo.
+echo exitcode: %errorcode%
 exit /b
 
 :install
@@ -210,6 +222,15 @@ data\gh.exe repo clone CodeDroidX/DroidPackageManager Packages\TempUpgradeSelf
 if %errorlevel% NEQ 0 goto repoerror
 xcopy Packages\TempUpgradeSelf %~dp0 /H /Y /C /R /S /I
 rmdir /q /s Packages\TempUpgradeSelf
+goto finish
+
+:login
+:relogin
+gh repo clone pass%random% >> nul
+if "%errorlevel%"=="4" (data\gh.exe auth login -w) else (goto stoplogin)
+goto relogin
+
+:stoplogin
 goto finish
 
 :tips

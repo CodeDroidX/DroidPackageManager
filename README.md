@@ -15,6 +15,7 @@ Syntax:\
 droid (action) (optional:package_name) (optional:author_name)
 
 Actions:\
+login (log-in with github)\
 install (installing\reinstalling new repo)\
 uninstall (uninstalling repo)\
 update (rewriting exist repo)\
