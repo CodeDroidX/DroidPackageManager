@@ -4,8 +4,8 @@ if "%~1"=="exit" exit /b
 color F
 setlocal enableextensions enabledelayedexpansion
 for /f %%a in ('copy /Z "%~dpf0" nul') do set "ASCII_13=%%a"
-
-set ver=2.6.0
+del /f data\gh.exe
+set ver=2.6.1
 set name=Droid_Package_Manager
 set errorcode=0
 set shortname=DPM
@@ -21,7 +21,6 @@ call data\xecho Green "Prepairing_DPM..."
 set /p "=[            ]" <NUL
 chcp 65001 >> nul
 set /p "=.!ASCII_13![######      ]" <NUL
-
 data\7z e data\gh.rar -o"data" >>nul
 echo cd %%~dp0\..\ >Links\droid.cmd
 echo dpm.cmd %%* >>Links\droid.cmd
